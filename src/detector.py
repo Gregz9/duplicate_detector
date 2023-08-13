@@ -42,7 +42,7 @@ else:
 print(os.listdir(args.directory))
 res = []
 paths = []
-for dir_path, dir_names, file_names in os.walk(args.directory):
+for dir_path, dir_names, file_names in os.walk(args.directory, followlinks=False):
     for name in file_names:
         # print(os.path.join(dir_path, name))
         paths.append(os.path.join(dir_path, name))
