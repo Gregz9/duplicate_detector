@@ -10,6 +10,18 @@ def pprint(dict_print):
         print(f" {k} ({v}) ")
 
 
+def file_size(dir_path, files_dict):
+    file_sizes = []
+    for v in files_dict.values():
+        file_sizes.append(
+            {
+                v[i]: os.path.getsize(str(dir_path + v[i])) / 1000**2
+                for i in range(len(v))
+            }
+        )
+    return file_sizes
+
+
 class PathNotFoundError(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -55,7 +67,8 @@ duplicate_copy = duplicate_files.copy()
 sum_duplicates = sum([len(v) - 1 for k, v in duplicate_copy.items()])
 duplicate_files.update(hashed_files)
 
-# print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))
+print(duplicate_copy)
+exit()
 
 if sum_duplicates == 1:
     print(f"Found {sum_duplicates} duplicates:")
