@@ -19,10 +19,12 @@ def contruct_string(duplicate_dict, file_sizes=[]):
     i = 0
     for k, v in duplicate_dict.items():
         if len(file_sizes) > 0:
-            dup_strings[f"({file_sizes[i][v[0]]} KB) " + " = ".join(v)] = k
+            file_string = f"({file_sizes[i][v[0]]} KB) " + " = ".join(v)
             i += 1
         else:
-            dup_strings[" = ".join(v)] = k
+            file_string = " = ".join(v)
+
+        dup_strings[file_string] = k
 
     return dup_strings
 
@@ -42,4 +44,4 @@ duplicate_dict = {
 }
 
 print(file_size(dir_path, duplicate_dict))
-print(contruct_string(duplicate_dict))  # , file_size(dir_path, duplicate_dict)))
+print(contruct_string(duplicate_dict, file_size(dir_path, duplicate_dict)))
