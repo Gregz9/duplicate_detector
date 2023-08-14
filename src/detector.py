@@ -24,38 +24,8 @@ class NoArgumentProvided(Exception):
         super().__init__(message)
 
 
-#
-# class MyArgumentParser(argparse.ArgumentParser):
-#     def exit(self, status=0, message=None):
-#         if status:
-#             print(NOT_PROVIDED_ERROR)
-#         exit(status)
-#
-#     def error(self, message):
-#         # self.print_help(sys.stderr)
-#         self.exit(1, f"ERROR: {self.prog, message}")
-
-
-# ap = MyArgumentParser()
-# ap.add_argument(
-#     "-dir",
-#     "--directory",
-#     type=str,
-#     required=True,
-#     help="Path of directory containing files to be checked by detector",
-# )
-# args = ap.parse_args()
-
-# if not os.path.exists(args.directory):
-#     raise PathNotFoundError("Invalid path! No existing directory with such name found!")
-# else:
-#     print(args.directory)
-
-# print(os.listdir(args.directory))
-
 if len(list(sys.argv)) < 2:
     raise NoArgumentProvided("No command has been passed! Program extiting.")
-
 
 res = []
 paths = []
@@ -67,13 +37,9 @@ for dir_path, dir_names, file_names in os.walk(str(sys.argv[1])):
             continue
         paths.append(file_path)
     res.extend(file_names)
-# print(res)
-# pprint(paths)
 
-data0 = open(paths[0], "rb")
-data0_hash = hashlib.file_digest(data0, "sha256").hexdigest()
-# print(paths[0])
-# print(data0_hash)
+# data0 = open(paths[0], "rb")
+# data0_hash = hashlib.file_digest(data0, "sha256").hexdigest()
 
 hashed_files = {}
 duplicate_files = {}
