@@ -5,9 +5,9 @@ import os
 import json
 
 
-def pprint(p_list):
-    for path in p_list:
-        print(path)
+def pprint(dict_print):
+    for k, v in dict_print.items():
+        print(f" {k} ({v}) ")
 
 
 class PathNotFoundError(Exception):
@@ -18,6 +18,13 @@ class PathNotFoundError(Exception):
 class NoArgumentProvided(Exception):
     def __init__(self, message):
         super().__init__(message)
+
+
+def construct_string(duplicates: dict) -> list[str]:
+    dup_strings = {}
+    for k, v in duplicates.items():
+        dup_strings[" = ".join(v)] = k
+    return dup_strings
 
 
 if len(list(sys.argv)) < 2:
@@ -42,10 +49,20 @@ for path in paths:
         duplicate_files[data_hash] = [file_name]
     else:
         duplicate_files[data_hash].append(file_name)
+
 duplicate_files = {k: v for k, v in duplicate_files.items() if len(v) > 1}
+duplicate_copy = duplicate_files.copy()
+sum_duplicates = sum([len(v) - 1 for k, v in duplicate_copy.items()])
 duplicate_files.update(hashed_files)
 
-print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))
+# print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))
+
+if sum_duplicates == 1:
+    print(f"Found {sum_duplicates} duplicates:")
+else:
+    print(f"Found {sum_duplicates} duplicates:")
+
+pprint(construct_string(duplicate_copy))
 
 outfile = open("meta.json", "w")
 json.dump(duplicate_files, outfile, indent=4, separators=(", ", ": "))
