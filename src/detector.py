@@ -19,36 +19,47 @@ class PathNotFoundError(Exception):
         super().__init__(message)
 
 
-class MyArgumentParser(argparse.ArgumentParser):
-    def exit(self, status=0, message=None):
-        if status:
-            print(NOT_PROVIDED_ERROR)
-        exit(status)
-
-    def error(self, message):
-        # self.print_help(sys.stderr)
-        self.exit(1, f"ERROR: {self.prog, message}")
+class NoArgumentProvided(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 
-ap = MyArgumentParser()
-ap.add_argument(
-    "-dir",
-    "--directory",
-    type=str,
-    required=True,
-    help="Path of directory containing files to be checked by detector",
-)
-args = ap.parse_args()
+#
+# class MyArgumentParser(argparse.ArgumentParser):
+#     def exit(self, status=0, message=None):
+#         if status:
+#             print(NOT_PROVIDED_ERROR)
+#         exit(status)
+#
+#     def error(self, message):
+#         # self.print_help(sys.stderr)
+#         self.exit(1, f"ERROR: {self.prog, message}")
 
-if not os.path.exists(args.directory):
-    raise PathNotFoundError("Invalid path! No existing directory with such name found!")
-else:
-    print(args.directory)
+
+# ap = MyArgumentParser()
+# ap.add_argument(
+#     "-dir",
+#     "--directory",
+#     type=str,
+#     required=True,
+#     help="Path of directory containing files to be checked by detector",
+# )
+# args = ap.parse_args()
+
+# if not os.path.exists(args.directory):
+#     raise PathNotFoundError("Invalid path! No existing directory with such name found!")
+# else:
+#     print(args.directory)
 
 # print(os.listdir(args.directory))
+
+if len(list(sys.argv)) < 2:
+    raise NoArgumentProvided("No command has been passed! Program extiting.")
+
+
 res = []
 paths = []
-for dir_path, dir_names, file_names in os.walk(args.directory):
+for dir_path, dir_names, file_names in os.walk(str(sys.argv[1])):
     for name in file_names:
         # print(os.path.join(dir_path, name))
         file_path = os.path.join(dir_path, name)
@@ -72,8 +83,21 @@ for path in paths:
     file_name = data.name.replace(str(args.directory + "/"), "")
     hashed_files[file_name] = [data_hash]
 
+# print(json.dumps(hashed_files, indent=4, separators=(", ", ": ")))
 
-print(json.dumps(hashed_files, indent=4, separators=(", ", ": ")))
+matching_hash = {}
+for k1, v1 in hashed_files.items():
+    if not v1[0] in matching_hash:
+        matching_hash[v1[0]] = [k1]
+    else:
+        matching_hash[v1[0]].append(k1)
 
-# outfile = open(paths[0], "r")
-# print(outfile.read())
+matching_hash = {key: value for key, value in matching_hash.items() if len(value) > 1}
+
+# wanted_keys = {}
+# for k1, v1 in matching_hash.items():
+# if len(v1) > 1:
+# wanted_keys[k1] = v1
+
+# wanted_keys.update(hashed_files)
+print(json.dumps(matching_hash, indent=4, separators=(", ", ": ")))
