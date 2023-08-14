@@ -16,5 +16,3 @@ file_hash = hashlib.file_digest(data2, "sha256")
 print(file_hash.hexdigest())
 
 data2.close()
-
-data2.close()

@@ -2,7 +2,6 @@ import argparse
 import hashlib
 import sys
 import os
-import json
 
 NOT_PROVIDED_ERROR = (
     "Flag has not been passed, use -h for info on use of -dir/--directory."
@@ -57,23 +56,7 @@ for dir_path, dir_names, file_names in os.walk(args.directory):
         paths.append(file_path)
     res.extend(file_names)
 # print(res)
-# pprint(paths)
-
-data0 = open(paths[0], "rb")
-data0_hash = hashlib.file_digest(data0, "sha256").hexdigest()
-# print(paths[0])
-# print(data0_hash)
-
-hashed_files = {}
-duplicate_files = {}
-for path in paths:
-    data = open(path, "rb")
-    data_hash = hashlib.file_digest(data, "sha256").hexdigest()
-    file_name = data.name.replace(str(args.directory + "/"), "")
-    hashed_files[file_name] = [data_hash]
-
-
-print(json.dumps(hashed_files, indent=4, separators=(", ", ": ")))
+pprint(paths)
 
 # outfile = open(paths[0], "r")
 # print(outfile.read())
