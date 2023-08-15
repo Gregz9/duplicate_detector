@@ -52,19 +52,18 @@ if __name__ == "__main__":
         else:
             directory = sys.argv[1:]
 
-    print(directory)
-    exit()
-
     paths = {}
     for direct in directory:
         p = []
-        for dir_path, dir_names, file_names in os.walk(str(directory)):
+        for dir_path, dir_names, file_names in os.walk(str(direct)):
             for name in file_names:
                 file_path = os.path.join(dir_path, name)
                 if os.path.islink(file_path):
                     continue
                 p.append(file_path)
         paths[direct] = p
+
+    print(paths.keys())
 
     hashed_files = {}
     duplicate_files = {}
@@ -84,12 +83,19 @@ if __name__ == "__main__":
     sum_duplicates = sum([len(v) - 1 for k, v in duplicate_copy.items()])
     duplicate_files.update(hashed_files)
 
-    # print(duplicate_copy)
+    # print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))
+
+    print(json.dumps(paths, indent=4, separators=(", ", ": ")))
+
+    print(json.dumps(duplicate_copy, indent=4, separators=(", ", ": ")))
+    exit()
 
     if sum_duplicates == 1:
         print(f"Found {sum_duplicates} duplicates:")
     else:
         print(f"Found {sum_duplicates} duplicates:")
+
+    exit()
 
     if str(sys.argv[1]) == "--sizes":
         print_dict = construct_string(
