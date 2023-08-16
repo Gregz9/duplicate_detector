@@ -18,6 +18,14 @@ def find_file_size():
     return file_sizes
 
 
+def pprint_new_files(new_files):
+    print("\n")
+    for k, v in new_files.items():
+        print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:-1])})")
+
+    print("\n")
+
+
 directories = sys.argv[1:]
 
 paths = {}
@@ -31,9 +39,9 @@ for directory in directories:
             p.append(file_path)
     paths[directory] = p
 
-for k, v in paths.items():
-    for path in v:
-        print(path)
+# for k, v in paths.items():
+#     for path in v:
+#         print(path)
 
 hashed_files = {}
 duplicate_files = {}
@@ -42,7 +50,7 @@ new_files = {}
 
 cnt = 0
 key_path = list(paths.keys())
-print(key_path)
+# print(key_path)
 for k, v in paths.items():
     for path in v:
         data = open(path, "rb")
@@ -56,26 +64,25 @@ for k, v in paths.items():
         hashed_files[file_name] = [data_hash]
         if not data_hash in duplicate_files:
             if cnt > 0:
-                new_files[file_name] = key_path[:cnt]
+                new_files[file_name] = key_path[: cnt + 1]
             duplicate_files[data_hash] = [file_name]
         else:
             duplicate_files[data_hash].append(file_name)
 
     cnt += 1
 
+
+pprint_new_files(new_files)
+
+exit()
 print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))
 print(json.dumps(new_files, indent=4, separators=(", ", ": ")))
+
 
 duplicate_files = {k: v for k, v in duplicate_files.items() if len(v) > 1}
 duplicate_copy = duplicate_files.copy()
 sum_duplicates = sum([len(v) - 1 for v in duplicate_copy.items()])
 duplicate_files.update(hashed_files)
-
-for k, v in paths.items():
-    for path in v:
-        data = open(path, "rb")
-        data_hash = hashlib.file_digest(data, "sha256").hexdigest()
-        file_name = data.name
 
 
 print(json.dumps(duplicate_files, indent=4, separators=(", ", ": ")))

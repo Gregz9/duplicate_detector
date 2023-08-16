@@ -9,6 +9,11 @@ def pprint_duplicates(dict_print):
         print(f" {k} ({v}) ")
 
 
+def pprint_new_files(new_files):
+    for k, v in new_files.items():
+        print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:-1])})")
+
+
 def find_file_size(duplicate_dict, paths):
     file_sizes = []
     for k, v in duplicate_dict.items():
@@ -94,12 +99,15 @@ if __name__ == "__main__":
         if "--new" in sys.argv:
             cnt += 1
 
-    print(json.dumps(new_files, indent=4, separators=(", ", ": ")))
+    # print(json.dumps(new_files, indent=4, separators=(", ", ": ")))
 
     duplicate_files = {k: v for k, v in duplicate_files.items() if len(v) > 1}
     duplicate_copy = duplicate_files.copy()
     sum_duplicates = sum([len(v) - 1 for k, v in duplicate_copy.items()])
     duplicate_files.update(hashed_files)
+
+    if str(sys.argv[1]) == "--new":
+        pprint_new_files(new_files)
 
     if sum_duplicates == 1:
         print(f"Found {sum_duplicates} duplicates:")
