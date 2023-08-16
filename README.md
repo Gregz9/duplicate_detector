@@ -31,6 +31,11 @@ The script can also be run with multiple directories as arguments, you simply ne
 ```
 python3 detector.py <directory_path1> <directory_path2> <directory_path3>
 ```
+
+After the program has finished running, you can call the following command to check the contents of the meta.json file: 
+```
+cat meta.json
+```
 #### Passing the "--sizes" flag
 In addition to directory paths, the user may provide the program with flags to get additional information about the files found. The first of this flags is "--sizes", and makes the program print the size of the all the duplicate files found. The call of "detector.py" using this flag will look like this: 
 ```
