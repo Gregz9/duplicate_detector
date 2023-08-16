@@ -3,107 +3,26 @@ import sys
 import os
 import json
 import time
+from utils import *
 
-
-def pprint_duplicates(dict_print):
-    for k, v in dict_print.items():
-        print(f" {k} ({v}) ")
-
-
-def pprint_new_files(new_files):
-    for k, v in new_files.items():
-        print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:-1])})")
-
-
-def pprint_mod_time(duplicates_n_time, paths):
-    idx = 0
-    directories = list(paths.keys())
-    for duplicate, time_ in duplicates_n_time.items():
-        print(
-            f"{duplicate} in {directories[0]} is the duplicate that was modified last at {time_}"
-        )
-        idx += 1
-
-
-def find_file_size(duplicate_dict, paths):
-    file_sizes = []
-    for k, v in duplicate_dict.items():
-        for file_name in v:
-            for k2, v2 in paths.items():
-                for path in v2:
-                    if file_name in path:
-                        file_size = {v[0]: os.path.getsize(str(path)) / 1000}
-                    if file_size in file_sizes:
-                        continue
-                    file_sizes.append(file_size)
-    return file_sizes
-
-
-def get_newest_duplicate(full_path_hash, duplicate_dict):
-    duplicates_moded_date = {}
-    for hash1, file_names in duplicate_dict.items():
-        file_n_time = {}
-        for full_path, hash2 in full_path_hash.items():
-            if hash1 == hash2[0]:
-                mod_time = os.path.getmtime(full_path)
-                file_n_time[full_path] = mod_time
-        duplicates_moded_date.update(file_n_time)
-
-    file_n_time = {}
-    for directory in paths.keys():
-        max_time = 0
-        file_name = ""
-        for file_path, mod_time in duplicates_moded_date.items():
-            if directory in file_path:
-                if mod_time > max_time:
-                    max_time = mod_time
-                    file_name = file_path.replace(directory, "")
-
-        file_n_time[file_name] = time.ctime(max_time)
-
-    file_n_time = {k: v for k, v in file_n_time.items() if k != ""}
-
-    return file_n_time
-
-
-class PathNotFoundError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class NoArgumentProvidedError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-def construct_string(duplicate_dict, file_sizes=[]):
-    dup_strings = {}
-    i = 0
-    for k, v in duplicate_dict.items():
-        if len(file_sizes) > 0:
-            file_string = f"({file_sizes[i][v[0]]} KB) " + " = ".join(v)
-            i += 1
-        else:
-            file_string = " = ".join(v)
-
-        dup_strings[file_string] = k
-
-    return dup_strings
-
-
+# List of available commands that can be passed to the script via terminal
 commands = ["--sizes", "--new", "--update", "--full_paths"]
 
 if __name__ == "__main__":
+    # Checking the order of arguments passed from terminal
     if len(sys.argv) < 2:
         raise NoArgumentProvidedError("No command has been passed! Program extiting.")
     elif len(sys.argv) == 2:
         directory = [sys.argv[1]]
+    # if more than one argument, check if the first argument is a flag/command
     elif len(sys.argv) > 2:
         if str(sys.argv[1]) in commands:
             directory = sys.argv[2:]
         else:
             directory = sys.argv[1:]
 
+    # Generating dictionary with dicts provided as arguments as keys, and list of all paths within
+    # directory as values.
     paths = {}
     for direct in directory:
         p = []
@@ -118,9 +37,11 @@ if __name__ == "__main__":
     hashed_files = {}
     duplicate_files = {}
 
+    # If "--new" is passed, create necessary containers
     if str(sys.argv[1]) == "--new":
         new_files = {}
         key_path = list(paths.keys())
+    # Counter for comparison when "--new" is passed as argument
     cnt = 0
 
     if str(sys.argv[1]) == "--update" or str(sys.argv[1]) == "--full_paths":
@@ -128,8 +49,11 @@ if __name__ == "__main__":
 
     for k, v in paths.items():
         for path in v:
+            # Reading files in binary
             with open(path, "rb") as data:
+                # Hasing the content of file
                 data_hash = hashlib.sha256(data.read()).hexdigest()
+                # Removing directory part of path from full path to file
                 file_name = data.name.replace(str(k), "")
                 hashed_files[file_name] = [data_hash]
 
@@ -137,6 +61,8 @@ if __name__ == "__main__":
                     filename = data.name
                     modified_duplicate[filename] = [data_hash]
 
+                # In order ot generate the part of dict which tracks duplicate files,
+                # we flip the original dict
                 if data_hash not in duplicate_files:
                     if cnt > 0 and "--new" in sys.argv:
                         new_files[file_name] = key_path[:cnt]
@@ -147,11 +73,16 @@ if __name__ == "__main__":
         if "--new" in sys.argv:
             cnt += 1
 
+    # Filtering out files which do not have duplicates
     duplicate_files = {k: v for k, v in duplicate_files.items() if len(v) > 1}
+    # Copy of duplicate dict for later usage with utils functions
     duplicate_copy = duplicate_files.copy()
+    # Total number of duplicates found across directory(-ies)
     sum_duplicates = sum([len(v) - 1 for k, v in duplicate_copy.items()])
+    # Final dictionary
     duplicate_files.update(hashed_files)
 
+    # Cheking which command has been passed to print correctly
     if str(sys.argv[1]) == "--new":
         pprint_new_files(new_files)
 
@@ -170,13 +101,16 @@ if __name__ == "__main__":
     pprint_duplicates(print_dict)
     if "--update" in sys.argv:
         print("Most recently modified duplicate files:")
-        pprint_mod_time(get_newest_duplicate(modified_duplicate, duplicate_copy), paths)
+        pprint_mod_time(
+            get_newest_duplicate(modified_duplicate, duplicate_copy, paths), paths
+        )
 
     if "--full_paths" in sys.argv:
         print("Full paths of all files checked by command-line tool and their hash:")
         for full_path, file_hash in modified_duplicate.items():
             print(f"{full_path} : {file_hash}")
 
+    # Writing the dicitionary to meta.json file
     outfile = open("meta.json", "w")
     json.dump(duplicate_files, outfile, indent=4, separators=(", ", ": "))
     outfile.write("\n")
