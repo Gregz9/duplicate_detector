@@ -9,8 +9,8 @@ python3 detector.py <directory_path>
 
 If any duplicated are detected, the command line tool will print a message in the terminal window that will look something like this:
 
-{
+```
 Found 3 duplicates:
  b.txt = h/t/j.txt = r/v.txt (1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15)
  h/y.txt = d/a.txt (9899324b0dd5f4b60e4551877f34e63c0c30c4ddf32a0c948ac559785de7021c)
- }
+```
