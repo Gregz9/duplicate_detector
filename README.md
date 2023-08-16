@@ -46,6 +46,9 @@ Found 3 duplicates:
  (0.047 KB) h/y.txt = d/a.txt (9899324b0dd5f4b60e4551877f34e63c0c30c4ddf32a0c948ac559785de7021c)
 ```
 #### Using the "--new" flag 
-Another flag that the user may provide the script with when calling it from the command line, is the "--new" flag, which allows the user to track files which are presente in one directory, but not another. 
-
+Another flag that the user may provide the script with when calling it from the command line, is the "--new" flag, which allows the user to track files which are presente in one directory, but not another. When using this flag instead of "--sizes", teh user will be required to pass at least two directory paths, as the main goal of using this flag, should be to compare the contents of directories, and not a directory with itself. When called from the command line, the command look like this
+```
+python3 detector.py --new <directory_path1> <directory_path2>
+```
+and will instruct detector to iterate through the directories one at a time. When detector starts iterating thorugh the second directory's content, it will compare it against files conatained within the duplicate directory, and if it's hash is not already present in the dictionary, this will indicate a new file. If a third directory was providedm its contents would we compared against both of the two previous ones.
 
