@@ -2,6 +2,8 @@
 This repo contains the code for a command line tool written in python3 and using only standard python libraries, which when provided with path to directory(-ies) will check for duplicate files within the directory, inlcuding subdirectories, and across directories, if provided with multiple paths. It will then print information about the duplicates it has found,
 including the name of the files sharing the exact same content, and their respective hash-ids (generated using "sha256"). It also writes the results to a file called "meta.json", in which you'll a dictionary conataining information about which duplicate files were found, and all the files that have been checked in the provided directories. 
 
+**You can find manually created directories used for testing in *test/test_directoires/* folder**
+
 #### Using the tool 
 Now in order to use the commandline tool, you need to run the following command followed by a directory path: 
 ```
@@ -92,3 +94,4 @@ Most recently modified duplicate files:
 When running the this script in the command line be wary of the fact that you cannot provide the program with two flags simultanously. You will have to run the program with one flag at a time, and change flags at each call to achieve desired output. 
 
 When it comes to the test files, these are not proper unit tests. They are more simple tests of different parts of detector.py which were tested during the development of the main program here. Hence, they will deviate storngly from the proper test that are usually written. These test also lack any form for comments, and may thus seem difficult to decode at times, therefore I strongly suggest to overlook them. If you however were to go down this path anyway, after some proper code analysis, they may give you a good intuition of how the different parts of detector behave separately by themselves. 
+
