@@ -8,18 +8,60 @@ File holding helper methods used for printing, and others for dict and list mani
 """
 
 
-def pprint_duplicates(dict_print):
-    """ """
+def pprint_duplicates(dict_print: dict) -> None:
+    """
+    Prints the hash and name of duplicate files found in directory(-ies) passed
+    as arguments:
+
+    Args:
+        dict_print (dict): Dictionary with hash of duplicates as key and list duplicate
+                        filenames as values sharing the same hash.
+
+    Returns:
+        Nothing
+    """
     for k, v in dict_print.items():
         print(f" {k} ({v}) ")
 
 
-def pprint_new_files(new_files):
+def pprint_new_files(new_files: dict) -> None:
+    """
+    When multiple dicitonaries are passed as arguments together with "--new"
+    to detector, it prints the new files not found in the dictionaries already
+    iterated thorugh.
+
+
+    Args:
+        new_files (dict{str : [str]): Dictionary containing filename as key and
+                            list of previous directories it was not present in.
+
+    Returns:
+        Nothing
+
+    Example:
+        E.g. if ./a/ and ./b/ are the directories passed, and c.txt
+        is found in ./b/ but not in ./a/ which was iterated over first,
+        c.txt will be included in the print.
+    """
     for k, v in new_files.items():
         print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:-1])})")
 
 
-def pprint_mod_time(duplicates_n_time, paths):
+def pprint_mod_time(duplicates_n_time: dict, paths: dict) -> None:
+    """
+    Iterates over keys and values of dictionary containing names of duplicate files and
+    the timestamp of when they were modified last time, and prints out that information.
+
+    Args:
+        duplicate_n_time (dict): Dictionary with name of duplicate file as key and the timestamp
+                                of when it was modified last time as value.
+
+        paths (dict{str : [str]}): Dictionary with directory paths passed as arguments to detector as keys,
+                    and list of paths of files conatined within each of the directories as values.
+
+    Returns:
+        Nothing
+    """
     idx = 0
     directories = list(paths.keys())
     for duplicate, time_ in duplicates_n_time.items():
