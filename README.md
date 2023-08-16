@@ -62,3 +62,6 @@ Found 4 duplicates:
  /r/f.txt = /i/c.txt (e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159)
 ```
 
+#### Two additional flags: "--update" and "--full_paths"
+Those two flags are used in the exact same manner as the "--sizes" flag above, and do not require the user to pass multiple diretctories sucha as the "--new" flag does. The only thing the user has to do again, is to replace one of the previous flags with either "--update" or "--full_paths". Now "--update" will instruct the tool to look through the dicitonary of duplicate files and for each unique hash-id("sha256") find the name of the duplicate file that has been modified most recently. 
+
