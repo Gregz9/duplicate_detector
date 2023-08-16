@@ -5,6 +5,7 @@ import json
 import time
 from utils import *
 
+
 # List of available commands that can be passed to the script via terminal
 commands = ["--sizes", "--new", "--update", "--full_paths"]
 

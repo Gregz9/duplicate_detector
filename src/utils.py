@@ -44,7 +44,7 @@ def pprint_new_files(new_files: dict) -> None:
         c.txt will be included in the print.
     """
     for k, v in new_files.items():
-        print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:-1])})")
+        print(f"{k} in {v[-1]} is new (not found in {', '.join(v[:len(v)])})")
 
 
 def pprint_mod_time(duplicates_n_time: dict, paths: dict) -> None:
