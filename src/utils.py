@@ -71,7 +71,23 @@ def pprint_mod_time(duplicates_n_time: dict, paths: dict) -> None:
         idx += 1
 
 
-def find_file_size(duplicate_dict, paths):
+def find_file_size(duplicate_dict: dict, paths: dict) -> list[dict]:
+    """
+    Finds the sizes of duplicate files found across directories passed as arguments
+    to detector.
+
+    Args:
+        duplicate_dict (dict {str: [str]}) : Dictionary with hash of duplicates as key and list duplicate
+                            filenames as values sharing the same hash.
+
+        paths (dict{str : [str]}): Dictionary with directory paths passed as arguments to detector as keys,
+                    and list of paths of files conatined within each of the directories as values.
+
+    Returns:
+        file_size (list[dict]) : List of dictionaries containing name of the first duplicate found
+                                across directories, and their respective sizes in KB.
+
+    """
     file_sizes = []
     for k, v in duplicate_dict.items():
         for file_name in v:
@@ -86,6 +102,27 @@ def find_file_size(duplicate_dict, paths):
 
 
 def get_newest_duplicate(full_path_hash, duplicate_dict, paths):
+    """
+    Returns A dictionary containing the name of the newest duplicate
+    for each of the hash-ids found in duplicate_dict, which is the
+    dictionary containing name of all duplicate files, and the timestamp
+    of last modification to the file.
+
+    Args:
+        full_path_hash (dict{str: [str]}) : Dictionary of full paths to
+                                        all files found in all directories
+                                        and their respective hash-ids.
+
+        duplicate_dict (dict {str: [str]}) : Dictionary with hash of duplicates as key and list duplicate
+                            filenames as values sharing the same hash.
+
+        paths (dict{str : [str]}): Dictionary with directory paths passed as arguments to detector as keys,
+                            and list of paths of files conatined within each of the directories as values.
+
+    Returns:
+        file_n_time (dict {str: timestamp}) : Dictionary with filename and timestamp
+    """
+
     duplicates_moded_date = {}
     for hash1, file_names in duplicate_dict.items():
         file_n_time = {}
@@ -113,6 +150,21 @@ def get_newest_duplicate(full_path_hash, duplicate_dict, paths):
 
 
 def construct_string(duplicate_dict, file_sizes=[]):
+    """
+    Contructs the string used for the main output of detector
+    when any duplicate files are detected. If file_sizes are passed,
+    the string inlcudes size of files measured in KB.
+
+    Args:
+        duplicate_dict (dict {str: [str]}) : Dictionary with hash of duplicates as key and list duplicate
+                            filenames as values sharing the same hash.
+
+        file_sizes (list[dict]) : List of dictionaries containing name of the first duplicate found
+                                across directories, and their respective sizes in KB.
+    Returns:
+        dup_strings (dict{str: str}) : Dictionary containing string for print as key, and hash-id
+                                    of duplicate files as value.
+    """
     dup_strings = {}
     i = 0
     for k, v in duplicate_dict.items():
@@ -128,10 +180,18 @@ def construct_string(duplicate_dict, file_sizes=[]):
 
 
 class PathNotFoundError(Exception):
+    """
+    Custom Error class for when no directory is provided as argument to detector
+    """
+
     def __init__(self, message):
         super().__init__(message)
 
 
 class NoArgumentProvidedError(Exception):
+    """
+    Custom Error class for when no argument is provided as argument to detector
+    """
+
     def __init__(self, message):
         super().__init__(message)

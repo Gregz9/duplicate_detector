@@ -13,6 +13,8 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         raise NoArgumentProvidedError("No command has been passed! Program extiting.")
     elif len(sys.argv) == 2:
+        if str(sys.argv[1]) in commands:
+            raise PathNotFoundError("No path has been provided! Program exiting")
         directory = [sys.argv[1]]
     # if more than one argument, check if the first argument is a flag/command
     elif len(sys.argv) > 2:
