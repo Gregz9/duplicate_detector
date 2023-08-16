@@ -69,4 +69,26 @@ Those two flags are used in the exact same manner as the "--sizes" flag above, a
 python3 detector.py --new <directory_path1> <directory_path2> <directory_path3>
 ```
 while the output will look something like this: 
+```
+ /b.txt = /h/t/j.txt = /r/v.txt (1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15)
+ /h/y.txt = /d/a.txt (9899324b0dd5f4b60e4551877f34e63c0c30c4ddf32a0c948ac559785de7021c)
+ /r/f.txt = /i/c.txt (e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159)
+Most recently modified duplicate files:
+2/i/c.txt in .../Programs/test_dir is the duplicate that was modified last at Tue Aug 15 22:03:02 2023
+/i/c.txt in .../Programs/test_dir is the duplicate that was modified last at Tue Aug 15 22:03:02 2023
+```
 
+"--full_paths" is called in the exact same way, with either a single or multiple paths, and will instruct the python script to print the full system paths of all the files detector has iterated over. Its output has the following format: 
+```
+.../Programs/test_dir/b.txt : ['1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15']
+.../Programs/test_dir/h/y.txt : ['9899324b0dd5f4b60e4551877f34e63c0c30c4ddf32a0c948ac559785de7021c']
+.../Programs/test_dir/h/t/j.txt : ['1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15']
+.../Programs/test_dir/r/f.txt : ['e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159']
+.../Programs/test_dir/r/v.txt : ['1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15']
+...
+```
+
+### Remarks on use and test-files
+When running the this script in the command line be wary of the fact that you cannot provide the program with two flags simultanously. You will have to run the program with one flag at a time, and change flags at each call to achieve desired output. 
+
+When it comes to the test files, these are not proper unit tests. They are more simple tests of different parts of detector.py which were tested during the development of the main program here. Hence, they will deviate storngly from the proper test that are usually written. These test also lack any form for comments, and may thus seem difficult to decode at times, therefore I strongly suggest to overlook them. If you however were to go down this path anyway, after some proper code analysis, they may give you a good intuition of how the different parts of detector behave separately by themselves. 
