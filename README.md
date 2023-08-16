@@ -63,5 +63,10 @@ Found 4 duplicates:
 ```
 
 #### Two additional flags: "--update" and "--full_paths"
-Those two flags are used in the exact same manner as the "--sizes" flag above, and do not require the user to pass multiple diretctories sucha as the "--new" flag does. The only thing the user has to do again, is to replace one of the previous flags with either "--update" or "--full_paths". Now "--update" will instruct the tool to look through the dicitonary of duplicate files and for each unique hash-id("sha256") find the name of the duplicate file that has been modified most recently. 
+Those two flags are used in the exact same manner as the "--sizes" flag above, and do not require the user to pass multiple diretctories sucha as the "--new" flag does. The only thing the user has to do again, is to replace one of the previous flags with either "--update" or "--full_paths". Now "--update" will instruct the tool to look through the dicitonary of duplicate files and for each unique hash-id("sha256") find the name of the duplicate file that has been modified most recently. The call from the command line look like this 
+```
+# Example with multiple directories
+python3 detector.py --new <directory_path1> <directory_path2> <directory_path3>
+```
+while the output will look something like this: 
 
