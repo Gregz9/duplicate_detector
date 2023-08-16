@@ -68,7 +68,7 @@ if __name__ == "__main__":
                 # we flip the original dict
                 if data_hash not in duplicate_files:
                     if cnt > 0 and "--new" in sys.argv:
-                        new_files[file_name] = key_path[:cnt]
+                        new_files[file_name] = key_path[: cnt + 1]
                     duplicate_files[data_hash] = [file_name]
                 else:
                     duplicate_files[data_hash].append(file_name)
