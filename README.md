@@ -50,5 +50,15 @@ Another flag that the user may provide the script with when calling it from the 
 ```
 python3 detector.py --new <directory_path1> <directory_path2>
 ```
-and will instruct detector to iterate through the directories one at a time. When detector starts iterating thorugh the second directory's content, it will compare it against files conatained within the duplicate directory, and if it's hash is not already present in the dictionary, this will indicate a new file. If a third directory was providedm its contents would we compared against both of the two previous ones.
+and will instruct detector to iterate through the directories one at a time. When detector starts iterating thorugh the second directory's content, it will compare it against files conatained within the duplicate directory, and if it's hash is not already present in the dictionary, this will indicate a new file. If a third directory was providedm its contents would we compared against both of the two previous ones. The message output by the command line tool, if any new files are found, will look something like this: 
+```
+/f.txt in .../Programs/test_dir2 is new (not found in .../Programs/test_dir)
+/a.txt in .../Programs/test_dir2 is new (not found in .../Programs/test_dir)
+/i/l.txt in .../Programs/test_dir2 is new (not found in .../Programs/test_dir)
+/g.txt in .../Programs/test_dir3 is new (not found in .../Programs/test_dir, .../Programs/test_dir2)
+Found 4 duplicates:
+ /b.txt = /h/t/j.txt = /r/v.txt (1c96838eaceb20143ebeab680c96477f94c116b50a806ca4556f6d5ed8dc4b15)
+ /h/y.txt = /d/a.txt (9899324b0dd5f4b60e4551877f34e63c0c30c4ddf32a0c948ac559785de7021c)
+ /r/f.txt = /i/c.txt (e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159)
+```
 
