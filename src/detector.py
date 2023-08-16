@@ -59,7 +59,7 @@ if __name__ == "__main__":
     elif len(sys.argv) == 2:
         directory = [sys.argv[1]]
     elif len(sys.argv) > 2:
-        if str(sys.argv[1]) == "--sizes" or "--new":
+        if str(sys.argv[1]) == "--sizes" or str(sys.argv[1]) == "--new":
             directory = sys.argv[2:]
         else:
             directory = sys.argv[1:]
@@ -77,10 +77,11 @@ if __name__ == "__main__":
 
     hashed_files = {}
     duplicate_files = {}
+
     if str(sys.argv[1]) == "--new":
         new_files = {}
         key_path = list(paths.keys())
-        cnt = 0
+    cnt = 0
 
     for k, v in paths.items():
         for path in v:
@@ -98,8 +99,6 @@ if __name__ == "__main__":
 
         if "--new" in sys.argv:
             cnt += 1
-
-    # print(json.dumps(new_files, indent=4, separators=(", ", ": ")))
 
     duplicate_files = {k: v for k, v in duplicate_files.items() if len(v) > 1}
     duplicate_copy = duplicate_files.copy()
