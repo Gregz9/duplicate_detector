@@ -38,20 +38,25 @@ duplicate_dict = {
         "h/y.txt",
         "d/a.txt",
     ],
-    "e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159": [
-        "r/f.txt",
-        "i/c.txt",
-    ],
+    # "e8e557393ac3b75519db87a65beabc43f0959694b7003cb6996fca09812c6159": [
+    #     "r/f.txt",
+    #     "i/c.txt",
+    # ],
 }
 
-file_sizes = []
-for k, v in duplicate_dict.items():
-    for file_name in v:
-        for k2, v2 in paths.items():
-            for path in v2:
-                if file_name in path:
-                    file_size = {v[0]: os.path.getsize(str(path)) / 1000}
+
+def find_file_size():
+    file_sizes = []
+    for k, v in duplicate_dict.items():
+        for file_name in v:
+            for k2, v2 in paths.items():
+                for path in v2:
+                    if file_name in path:
+                        file_size = {v[0]: os.path.getsize(str(path)) / 1000}
                     if file_size in file_sizes:
                         continue
                     file_sizes.append(file_size)
-print(file_sizes)
+    return file_sizes
+
+
+print(find_file_size())
