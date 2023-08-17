@@ -1,6 +1,6 @@
 ### Duplicate detector (command line python tool)
-This repo contains the code for a command line tool written in python3 and using only standard python libraries, which when provided with path to directory(-ies) will check for duplicate files within the directory, inlcuding subdirectories, and across directories, if provided with multiple paths. It will then print information about the duplicates it has found,
-including the name of the files sharing the exact same content, and their respective hash-ids (generated using "sha256"). It also writes the results to a file called "meta.json", in which you'll a dictionary conataining information about which duplicate files were found, and all the files that have been checked in the provided directories. 
+This repo contains the code for a command line tool written in python3 (using only standard python libraries), which when provided with path to directory(-ies) will check for duplicate files within the directory, inlcuding subdirectories, and across directories, if provided with multiple paths. It will then print information about the duplicates it has found,
+including the name of the files sharing the exact same content, and their respective hash-ids (generated using "sha256"). It also writes the results to a file called "meta.json", in which you'll find a dictionary containing information about which duplicate files were found, and all the files that have been checked in the provided directories. 
 
 **You can find manually created directories used for testing in *test/test_directoires/* folder**
 
